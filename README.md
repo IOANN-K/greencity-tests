@@ -13,3 +13,13 @@ https://www.greencity.cx.ua/#/greenCity/events
 
 ### Author / Автор
 Kozii Ivan / Козій Іван
+
+## Discovered Issues / Виявлені дефекти
+During test case creation, the following issues were identified:
+
+1. **Event Search Issue (TC-EV-002 Fail) (High):**  
+Searching for a specific event by its full name often returns "We didn't find any results matching to this search", while one-letter search works. 
+2. **Broken Date Range Logic (TC-EV-003) (High):**
+   - **Issue:** The date filter exhibits undefined behavior. Selecting a range (e.g., Feb 20 – Feb 22) fails to show relevant events for those dates, but unexpectedly displays events from the past (e.g., Feb 19).
+   - **Technical Observation:** This indicates a logic error in date parsing or a Timezone Offset issue (UTC vs Local Time).
+   - **Impact:** TC-EV-003 cannot be verified successfully as the system returns incorrect and unrelated data.
