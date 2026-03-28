@@ -5,6 +5,9 @@ EN: This repository contains a basic set of test cases to test the functionality
 
 UA: Цей репозиторій містить базовий набір тест-кейсів для перевірки функціональності сторінки подій (Events) веб-застосунку GreenCity. Мета роботи - продемонструвати навички структурування документації та аналізу вимог.
 
+Test Cases:  
+https://github.com/IOANN-K/greencity-tests/blob/main/test-cases/events-page-tests.md
+
 ### Tested page / Тестована сторінка
 https://www.greencity.cx.ua/#/greenCity/events
 
