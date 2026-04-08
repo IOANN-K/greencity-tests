@@ -210,3 +210,37 @@ N/A
 
 **Additional Context**  
 N/A
+
+---
+
+## TC-EV-006: Parameterized Search with Multiple Terms
+**Title:** Verifying that the search functionality correctly handles various valid search queries.
+
+**Related Requirement:** As a user, I want to search for events using different terms so that I can ensure the search engine is consistent and reliable.
+
+**Date Created** 2026-03-28
+
+**Author** Kozii Ivan
+
+**Priority** Medium
+
+**Preconditions:**
+- URL: https://www.greencity.cx.ua/#/greenCity/events
+- Events with titles containing "E", "Eco", "Green", and "Event" are present in the system.
+
+| Step | Action | Data | Expected Result |
+| :--- | :--- | :--- | :--- |
+| 1 | Open the search interface and enter a single character | "E" | Results are filtered; at least one event containing "E" is displayed. |
+| 2 | Clear the field and enter a short keyword | "Eco" | Results update dynamically to show events specifically containing "Eco". |
+| 3 | Clear the field and enter a common category word | "Green" | Results update; only events with "Green" in the title or description are shown. |
+| 4 | Clear the field and enter a general term | "Event" | The list displays events matching "Event"; result count is verified to be > 0. |
+
+**Postconditions** No data changes
+
+**Environment** **OS:** Windows 11  
+**Browser:** Brave (Latest version)  
+**Resolution:** 1920x1080
+
+**Screenshots** N/A
+
+**Additional Context** This test case is implemented as a parameterized test using `self.subTest()` to ensure stability across different data sets.
