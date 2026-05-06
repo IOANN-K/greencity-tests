@@ -1,0 +1,11 @@
+__pycache__/
+*.pyc
+*.pyo
+.pytest_cache/
+venv/
+.venv/
+env/
+allure-results/
+.vscode/
+.idea/
+.DS_Storepytest --alluredir=allure-results
