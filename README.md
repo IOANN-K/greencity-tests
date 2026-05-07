@@ -1,37 +1,172 @@
-# GreenCity Events Page Testing
+# GreenCity — Events Page Testing
+> **SoftServe Academy · QA Homework**
 
-### Project description / Опис проєкту 
-EN: This repository contains a basic set of test cases to test the functionality of the Events page of the GreenCity web application. The purpose of the work is to demonstrate skills in structuring documentation and analyzing requirements.
+---
 
-UA: Цей репозиторій містить базовий набір тест-кейсів для перевірки функціональності сторінки подій (Events) веб-застосунку GreenCity. Мета роботи - продемонструвати навички структурування документації та аналізу вимог.
+# Project Description / Опис проєкту
 
-Test Cases:  
-https://github.com/IOANN-K/greencity-tests/blob/main/test-cases/events-page-tests.md
+**EN:** This repository contains a structured set of manual test cases and automated Selenium tests for the **Events** page of the GreenCity web application. The project demonstrates skills in test documentation, requirements analysis, Page Object Model design, and test automation using Python + Selenium + Allure.
 
-Tests:
-https://github.com/IOANN-K/greencity-tests/blob/main/tests/test_events_page.py
+**UA:** Репозиторій містить структурований набір ручних тест-кейсів та автоматизованих Selenium-тестів для сторінки **Events** вебзастосунку GreenCity. Проєкт демонструє навички написання тестової документації, аналізу вимог, побудови Page Object Model та автоматизації тестування за допомогою Python + Selenium + Allure.
 
-## How to Run Tests / Як запустити тести
-1. **Clone the repository:**
-   `git clone https://github.com/IOANN-K/greencity-tests.git`
-2. **Install dependencies:**
-   `pip install -r requirements.txt`
-3. **Run tests:**
-   `python -m unittest discover tests`
+---
 
-### Tested page / Тестована сторінка
-https://www.greencity.cx.ua/#/greenCity/events
+# Repository Structure / Структура репозиторію
 
-### Author / Автор
-Kozii Ivan / Козій Іван
+```bash
+greencity-tests/
+├── src/
+│   ├── components/
+│   │   ├── __init__.py
+│   │   ├── base_component.py
+│   │   ├── event_card.py
+│   │   ├── filter_panel.py
+│   │   └── header.py
+│   ├── pages/
+│   │   ├── __init__.py
+│   │   ├── base_page.py
+│   │   └── events_page.py          # Main Page Object used by the test suite
+│   └── __init__.py
+├── pages/                          # Legacy page helpers
+│   ├── components/
+│   │   └── event_card_components.py
+│   ├── base_page.py
+│   └── events_page.py
+├── test-cases/
+│   └── events-page-tests.md        # Manual test cases (TC-EV-001 – TC-EV-006)
+├── tests/
+│   ├── conftest.py                 # Fixtures (driver setup/teardown)
+│   ├── test_events_page_lesson6.py # Production-ready tests (pytest + Allure + POM)
+│   ├── test_events_page_lesson5.py # Intermediate implementation (unittest + POM)
+│   ├── test_events_page.py         # Initial raw Selenium implementation
+│   └── utils.py
+├── pytest.ini
+├── requirements.txt
+└── README.md
+```
 
-## Discovered Issues / Виявлені дефекти
-During test case creation, the following issues were identified:
+---
 
-1. **Event Search Issue (TC-EV-002 Fail) (High):**  
-Searching for a specific event by its full name often returns "We didn't find any results matching to this search", while one-letter search works. 
-PS: The same issue is on TC-EV-006
-2. **Broken Date Range Logic (TC-EV-003) (High):**
-   - **Issue:** The date filter exhibits undefined behavior. Selecting a range (e.g., Feb 20 – Feb 22) fails to show relevant events for those dates, but unexpectedly displays events from the past (e.g., Feb 19).
-   - **Technical Observation:** This indicates a logic error in date parsing or a Timezone Offset issue (UTC vs Local Time).
-   - **Impact:** TC-EV-003 cannot be verified successfully as the system returns incorrect and unrelated data.
+# Test Cases / Тест-кейси
+
+📄 `events-page-tests.md`
+
+| ID         | Title                                 | Priority | Type     |
+|------------|---------------------------------------|----------|----------|
+| TC-EV-001  | Filter by Type (Social)               | Medium   | Positive |
+| TC-EV-002  | Search by Name                        | High     | Positive |
+| TC-EV-003  | Filter by Date Range                  | Medium   | Positive |
+| TC-EV-004  | Unauthorized Event Creation           | Medium   | Negative |
+| TC-EV-005  | Search for a Non-existent Event       | Low      | Negative |
+| TC-EV-006  | Parameterized Search (Multiple Terms) | Medium   | Positive |
+
+---
+
+# Automated Tests / Автоматизовані тести
+
+The repository contains three iterations of automated tests that demonstrate the progression of automation skills — from basic Selenium scripts to a production-ready test framework.
+
+## ✅ `test_events_page_lesson6.py` — Production Ready (pytest + Allure + POM)
+
+Main test suite built using modern automation practices.
+
+- **Framework:** pytest + Allure for detailed reporting.
+- **Design Pattern:** Page Object Model (POM). Page interaction logic is separated into `src/pages/events_page.py`.
+- **Code Quality:** Uses fixtures (`conftest.py`) and parameterization for cleaner and reusable tests.
+
+| Test Method                  | Covers    | Allure Story |
+| ---------------------------- | --------- | ------------- |
+| `test_filter_by_type`        | TC-EV-001 | Filters       |
+| `test_search_by_name`        | TC-EV-002 | Search        |
+| `test_parameterized_search`  | TC-EV-006 | Search        |
+
+```bash
+pytest tests/test_events_page_lesson6.py --alluredir=allure-results
+allure serve allure-results
+```
+
+## 📘 `test_events_page_lesson5.py` — Intermediate (unittest + POM)
+
+Second iteration of the framework. Introduces the Page Object Model while still using Python’s built-in `unittest` framework.
+
+- Uses page classes for locating and interacting with elements.
+- Step logging implemented through a custom `log_step` utility.
+- Reporting is console-based without Allure integration.
+
+```bash
+python -m unittest tests/test_events_page_lesson5.py -v
+```
+
+## 📗 `test_events_page.py` — Legacy / Initial (unittest)
+
+First iteration based on raw Selenium.
+
+- No Page Object Model: locators and test logic are placed directly inside test methods.
+- Direct WebDriver management in `setUp` and `tearDown`.
+
+```bash
+python -m unittest tests/test_events_page.py -v
+```
+
+---
+
+# How to Run Tests / Як запустити тести
+
+**Prerequisites:** Python 3.8+ and Google Chrome installed.
+
+```bash
+# 1. Clone the repository
+git clone https://github.com/IOANN-K/greencity-tests.git
+cd greencity-tests
+
+# 2. Install dependencies
+pip install -r requirements.txt
+```
+
+## Run all tests
+
+```bash
+pytest tests/ --alluredir=allure-results
+allure serve allure-results
+```
+
+## Run a specific test suite
+
+```bash
+# Main production-ready suite
+pytest tests/test_events_page_lesson6.py -v
+
+# Intermediate suite
+python -m unittest tests/test_events_page_lesson5.py -v
+
+# Legacy suite
+python -m unittest tests/test_events_page.py -v
+```
+
+## Dependencies (`requirements.txt`)
+
+```txt
+selenium==4.41.0
+webdriver-manager==4.0.2
+pytest==9.0.3
+allure-pytest==2.16.0
+```
+
+---
+
+# Tested Page / Тестована сторінка
+
+🌐 https://www.greencity.cx.ua/#/greenCity/events
+
+## Environment
+
+- OS: Windows 11
+- Browser: Chrome / Brave (latest versions)
+- Resolution: 1920×1080
+
+---
+
+# Author / Автор
+
+**Kozii Ivan / Козій Іван**  
+SoftServe IT Academy · QA Course
